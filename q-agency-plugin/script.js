@@ -1,6 +1,5 @@
-//jQuery(document).ready(function($) {});
 document.addEventListener("DOMContentLoaded", function() {
-    fetch('https://symfony-skeleton.q-tests.com/api/v2/token', {
+    /*fetch('https://symfony-skeleton.q-tests.com/api/v2/token', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -8,5 +7,5 @@ document.addEventListener("DOMContentLoaded", function() {
             },
             body: JSON.stringify({ email: 'ahsoka.tano@q.agency', password: 'Kryze4President' })
         }).then(res => res.json())
-        .then(res => console.log(res));
+        .then(res => console.log(res));*/
 });

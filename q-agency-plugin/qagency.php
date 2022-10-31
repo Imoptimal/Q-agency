@@ -37,7 +37,8 @@ if (!class_exists('Q_Agency_Plugin')) {
             add_action('wp_enqueue_scripts', array($this, 'frontend_assets'));
             add_action('init', array($this, 'add_custom_post_type'));
             add_action('add_meta_boxes', array($this, 'add_custom_metabox'));
-            add_action( 'save_post', array($this, 'save_custom_metabox'));
+            add_action('save_post', array($this, 'save_custom_metabox'));
+            add_action('rest_api_init', array($this, 'qagencymovies_metabox_restapi'));
         }
 
         /**
@@ -91,10 +92,10 @@ if (!class_exists('Q_Agency_Plugin')) {
             $screens = ['qagencymovies'];
             foreach ( $screens as $screen ) {
                 add_meta_box(
-                    'qagencymovies_box_id',                 // Unique ID
-                    'Movies Title (metabox)',      // Box title
-                    [ $this, 'display_qagencymovies_metabox' ],  // Content callback, must be of type callable
-                    $screen                            // Post type
+                    'qagencymovies_box_id',
+                    'Movies Title (metabox)',
+                    [$this, 'display_qagencymovies_metabox'],
+                    $screen
                 );
             }
         }
@@ -105,7 +106,7 @@ if (!class_exists('Q_Agency_Plugin')) {
      * @since    1.0.0
 	 * @param int $post_id  The post ID.
 	 */
-	public static function save_custom_metabox( int $post_id ) {
+	public function save_custom_metabox( int $post_id ) {
 		if ( array_key_exists( 'qagencymovies_field', $_POST ) ) {
 			update_post_meta(
 				$post_id,
@@ -123,15 +124,34 @@ if (!class_exists('Q_Agency_Plugin')) {
          */
         public static function display_qagencymovies_metabox($post) {
 $value = get_post_meta( $post->ID, '_qagencymovies_meta_key', true );
-if ($value == '') {
-    $value = 'NOTHING STORED YET!';
-}
-	?>
-<div class="current">Current Movie title (stored in database):
-    <? echo $value ?>
-</div>
+if ($value == '') { ?>
 <input name="qagencymovies_field" type="text">
+<?php } else { ?>
+<input name="qagencymovies_field" type="text" value="<?php echo $value ?>">
 <?php }
+}
+
+        /**
+         * Make metabox data avaliable on the front-end (through REST API)
+         *
+         * @since    1.0.0
+         */
+        public function qagencymovies_metabox_restapi() {
+            register_rest_field('qagencymovies', 'qagencymovies_meta_key', array(
+                'get_callback' => [$this, 'get_qagencymovies_metabox'],
+            ));
+        }
+
+        /**
+         * Get the value of metabox to send through REST API
+         *
+         * @since    1.0.0
+         */
+        public static function get_qagencymovies_metabox($object) {
+            $post_id = $object['id'];
+            return get_post_meta($post_id);
+        }
+
     }
     $wp_q_agency_object = new Q_Agency_Plugin();
 }
