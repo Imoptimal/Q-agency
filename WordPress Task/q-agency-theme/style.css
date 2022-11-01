@@ -1,0 +1,27 @@
+/*
+ Theme Name:   Q Agency Test Theme
+ Description:  
+ Author:       Ivan Maljukanovic
+ Author URI:   https://imoptimal.com
+ Version:      1.0.0
+ License:      GNU General Public License v2 or later
+ License URI:  http://www.gnu.org/licenses/gpl-2.0.html
+ Text Domain:  qagencytheme
+*/
+
+body {
+    background-color: #f7f6f6;
+    color: #1a1a1a;
+}
+
+.qagency-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.qagency-content .title {
+    border-bottom: solid 1px #1a1a1a;
+    text-shadow: 1px 1px #00ff15, 2px 2px #0ff;
+}

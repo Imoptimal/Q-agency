@@ -24,8 +24,6 @@ if (!class_exists('Q_Agency_Theme')) {
         wp_enqueue_style('qagency-theme-style', get_stylesheet_uri(), [], '1.0.0', 'all');
         // Default script.js
         wp_enqueue_script('qagency-theme-script', get_stylesheet_directory_uri() . '/script.js', [], '1.0.0', true);
-        $website_url = home_url();
-        wp_localize_script('qagency-theme-script', 'qagency_php', array('website_url' => $website_url));
         
     }
 
