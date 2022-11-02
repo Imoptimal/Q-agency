@@ -1,20 +1,21 @@
 <?php
 /** 
- * Plugin that add Gutenberg block samples
+ * Plugin that add dynamic Gutenberg block 
  * 
- * @link              https://github.com/eudesgit/gutenberg-sample-blocks
+ * @link              https://github.com/Imoptimal/Q-agency
  * @since             1.0.0
- * @package           Gutenberg_Block_Samples
+ * @package           Gutenberg_Dynamic_Block
  * 
  * @wordpress-plugin
- * Plugin Name:       Gutenberg Block Samples
- * Plugin URI:        https://github.com/eudesgit/gutenberg-sample-blocks
- * Description:       Simple plugin that adds Gutenberg block samples for WP developers learning and boilerplate
+ * Plugin Name:       Gutenberg Dynamic Block
+ * Plugin URI:        https://github.com/Imoptimal/Q-agency
+ * Description:       
  * Version:           0.8.0
- * Author:            Eudes
- * Author URI:        https://github.com/eudesgit/
- * License:           Apache-2.0
- * Text Domain:       gutenberg-blocks-sample
+ * Author:            Ivan Maljukanovic
+ * Author URI:        https://imoptimal.com/
+ * License: GNU General Public License v3 or later
+ * License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
+ * Text Domain:       gutenberg-dynamic-block
  */
 
 // If this file is called directly, abort.
@@ -22,9 +23,9 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-const GBC_VERSION = '0.8.0';
+const GDB_VERSION = '1.0.0';
 
-class Gutenberg_Blocks_Sample {
+class Gutenberg_Dynamic_Block {
 
 	/**
 	 * The unique identifier of this plugin (slug).
@@ -55,7 +56,7 @@ class Gutenberg_Blocks_Sample {
 	 */
 	public function __construct() {
         
-        $this->plugin_name = 'gutenberg-blocks-sample';
+        $this->plugin_name = 'gutenberg-dynamic-block';
 
         $this->actions = [];
 		$this->filters = [];
@@ -89,46 +90,49 @@ class Gutenberg_Blocks_Sample {
      */
     public function register_dynamic_block_action ( ) {
 
-        $block_name = 'block-dynamic';
+        $block_name = 'fav-movie-quotes';
 
-        $block_namespace = 'gutenberg-blocks-sample/' . $block_name;
+        $block_namespace = 'gutenberg-dynamic-block/' . $block_name;
 
         $script_slug = $this->plugin_name . '-' . $block_name;
         $style_slug = $this->plugin_name . '-' . $block_name . '-style';
+		$editor_script_slug = $this->plugin_name . '-' . $block_name . '-editor-script';
         $editor_style_slug = $this->plugin_name . '-' . $block_name . '-editor-style';
 
         // The JS block script
-         wp_enqueue_script( 
-            $script_slug, 
+        wp_enqueue_script( 
+            $editor_script_slug, 
             plugin_dir_url( __FILE__ ) . '/build/index.js', 
             ['wp-editor', 'wp-blocks', 'wp-i18n', 'wp-element'], // Required scripts for the block
-            GBC_VERSION
+            GDB_VERSION
         );
 
         // The block style
         // It will be loaded on the editor and on the site
-        /*wp_register_style(
+        wp_register_style(
             $style_slug,
-            plugin_dir_url( __FILE__ )  . $block_name . '/css/style.css', 
+            plugin_dir_url( __FILE__ )  . '/build/index.css', 
             ['wp-blocks'], // General style
-            GBC_VERSION
-        );            
+            GDB_VERSION
+        );
 
         // The block style for the editor only
         wp_register_style(
             $editor_style_slug,
-            plugin_dir_url( __FILE__ ) . $block_name . '/css/editor.css', 
+            plugin_dir_url( __FILE__ ) . '/build/index.css', 
             ['wp-edit-blocks'], // Style for the editor
-            GBC_VERSION
-        );*/
+            GDB_VERSION
+        );     
         
         // Registering the block
         register_block_type(
             $block_namespace,  // Block name with namespace
             [
+				'api_version' => 2,
                 'style' => $style_slug, // General block style slug
                 'editor_style' => $editor_style_slug, // Editor block style slug
-                'editor_script' => $script_slug,  // The block script slug
+                'editor_script' => $editor_script_slug,  // The block script slug
+				'script' => $script_slug,
                 'render_callback' => [$this, 'block_dynamic_render_cb'], // The render callback
             ]
         );
@@ -149,9 +153,9 @@ class Gutenberg_Blocks_Sample {
     public function block_dynamic_render_cb ( $att ) {
 
         // Coming from RichText, each line is an array's element
-        $soma = $att['number1'][0] + $att['number2'][0]; 
+        $Content = $att['favQuotes'];
 
-        $html = "<h1>$soma</h1>";
+        $html = "<div id='fav-movie-quotes-box'><h5>Favourite Movie Quotes:</h5><p>$Content</p></div>";
 
         return $html;
 
@@ -219,14 +223,11 @@ class Gutenberg_Blocks_Sample {
 			add_action( $hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'], $hook['accepted_args'] );
 		}
 
-	}    
-
-
-
+	}
 }
 
 /*
  * BEGIN
  */
-$gsb = new Gutenberg_Blocks_Sample();
+$gsb = new Gutenberg_Dynamic_Block();
 $gsb->run();
