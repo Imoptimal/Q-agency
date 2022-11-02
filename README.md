@@ -1,8 +1,8 @@
-# Basic WordPress Task (WordPress Task/q-agency-plugin and WordPress Task/q-agency theme):
+# Basic WordPress Task (q-agency-plugin and q-agency theme):
 - Add custom post type (Movies), with a custom meta field (post_title)
 - Custom meta field is displayed as a metabox in the editor, and displayed on the front-end as the title of the post (through the WordPress theme and it's template for single post)
 
-# Advanced WordPress Task (WordPress Task/q-agency-block):
+# Advanced WordPress Task (q-agency-block):
 - Add custom dynamic block for favourite movie quotes
 
 # Client Task:
